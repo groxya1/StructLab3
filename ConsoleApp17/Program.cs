@@ -7,12 +7,17 @@ namespace ConsoleApp17
     {
         static void Main(string[] args)
         {
-            BinaryTree<int> binTree = new BinaryTree<int>(1);
-            binTree.Add(2, 3, 4, 5, 6, 7, 8, 9);
-            Tree<int> tree = new Tree<int>(1);
-            tree.Add(2, 3, 4);
-            tree.Add(tree.Root.GetChild(0),5,6);
-            Console.WriteLine(tree.ConvertToBinaryTree().ToPrint());
+            BinaryTree<int> binTree = new BinaryTree<int>(7, null);
+            binTree.Add(9, 5, 2, 3, 6, 1, 8, 4);
+            Console.WriteLine(binTree.ToPrint());
+            Console.WriteLine("идём направо:" + binTree.Right.ToPrint());
+            Console.WriteLine("идём как я вчера:" + binTree.Left.Right.ToPrint());
+            Tree<int> tree = new Tree<int>(4);
+            tree.Add(3, 1, 2);
+            tree.Add(tree.Root.GetChild(0),8,5);
+            tree.Add(tree.Root.GetChild(0).GetChild(1), 6, 7, 9);
+            Console.WriteLine("вот это дерево:" + tree.ToString());
+            Console.WriteLine( "а вот это уже не очень:" + tree.ConvertToBinaryTree().ToPrint());
             Console.ReadKey();
         }
     }
@@ -48,7 +53,7 @@ namespace ConsoleApp17
             {
                 Console.WriteLine(item);
             }*/
-            BinaryTree<T> binaryTree = new BinaryTree<T>(root.Data);
+            BinaryTree<T> binaryTree = new BinaryTree<T>(this.root.Data,null);
             outputList.RemoveAt(0);
             binaryTree.Add(outputList.ToArray());
             return binaryTree;
@@ -72,7 +77,7 @@ namespace ConsoleApp17
             WriteDataToList(this.root);
             string output = string.Empty;
             foreach (T value in outputList)
-                output += value + ", ";
+                output += value + " ";
             return output.Remove(output.Length - 2);
         }
     }
@@ -105,27 +110,30 @@ namespace ConsoleApp17
         public BinaryTree<T> Right
         { get { return right; } }
 
-        public BinaryTree(T value, BinaryTree<T> parent = null)
+        public BinaryTree(T value, BinaryTree<T> parent)
         {
             this.data = value;
             this.parent = parent;
         }
 
+        public void Add(T value)
+        {
+            if (value.CompareTo(this.data) < 0)
+            {
+                if (this.left == null) this.left = new BinaryTree<T>(value, this);
+                else this.left.Add(value);
+            }
+            else
+            {
+                if (this.right == null) this.right = new BinaryTree<T>(value, this);
+                else this.right.Add(value);
+            }
+        }
+
         public void Add(params T[] values)//было лень поэтому подумал
         {
             foreach (T value in values)
-            {
-                if (value.CompareTo(this.data) < 0)
-                {
-                    if (this.left == null) this.left = new BinaryTree<T>(value, this);
-                    else if (this.left != null) this.left.Add(value);
-                }
-                else
-                {
-                    if (this.right == null) this.right = new BinaryTree<T>(value, this);
-                    else if (this.right != null) this.right.Add(value);
-                }
-            }
+                Add(value);
             return;
         }
 
