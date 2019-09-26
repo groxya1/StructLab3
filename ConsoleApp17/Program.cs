@@ -10,14 +10,18 @@ namespace ConsoleApp17
             BinaryTree<int> binTree = new BinaryTree<int>(7);
             binTree.Add(9, 5, 2, 3, 6, 1, 8, 4);
             Console.WriteLine(binTree.ToPrint());
-            Console.WriteLine("идём направо:" + binTree.Right.ToPrint());
-            Console.WriteLine("идём как я вчера:" + binTree.Left.Right.ToPrint());
-            Tree<int> tree = new Tree<int>(4);
-            tree.Add(3, 1, 2);
-            tree.Add(tree.Root.GetChild(0),8,5);
-            tree.Add(tree.Root.GetChild(0).GetChild(1), 6, 7, 9);
-            Console.WriteLine("вот это дерево:" + tree.ToString());
-            Console.WriteLine( "а вот это уже не очень:" + tree.ConvertToBinaryTree().ToPrint());
+            Console.WriteLine("идём направо: " + binTree.Right.ToPrint());
+            Console.WriteLine("идём налево: " + binTree.Left.ToPrint());
+            Console.WriteLine("идём как я вчера: " + binTree.Left.Right.ToPrint());
+            Tree<int> tree = new Tree<int>(5);
+            tree.Add(3, 2, 1);
+            tree.Add(tree.Root.GetChild(0),8,7);
+            tree.Add(tree.Root.GetChild(0).GetChild(1), 6, 4, 9);
+            Console.WriteLine("это дерево с корнем 5:" + tree.ToString());
+            Console.WriteLine("это 1-ое поддерево дерева с корнем 5: " + tree.Print(tree.Root.GetChild(0)));
+            Console.WriteLine("это бинарное дерево, полученное из 1-го поддерева дерева с корнем 5: " + tree.ConvertToBinaryTree(tree.Root.GetChild(0)).ToPrint());
+            Console.WriteLine("это правое поддерево бинарного дерева, полученного из 1-го поддерева дерева с корнем 5: " + tree.ConvertToBinaryTree(tree.Root.GetChild(0)).Right.ToPrint());
+            Console.WriteLine("это левое поддерево правого поддерева бинарного дерева, полученного из 1-го поддерева дерева с корнем 5: " + tree.ConvertToBinaryTree(tree.Root.GetChild(0)).Right.Left.ToPrint());
             Console.ReadKey();
         }
     }
@@ -45,18 +49,19 @@ namespace ConsoleApp17
         }
 
 
-        public BinaryTree<T> ConvertToBinaryTree()
+        public BinaryTree<T> ConvertToBinaryTree(Node<T> rootNode = null)
         {
+            if (rootNode == null) rootNode = this.root;
             outputList.Clear();
-            WriteDataToList(this.root);
-            BinaryTree<T> binaryTree = new BinaryTree<T>(this.root.Data,null);
+            WriteDataToList(rootNode);
+            BinaryTree<T> binaryTree = new BinaryTree<T>(rootNode.Data,null);
             outputList.RemoveAt(0);
             binaryTree.Add(outputList.ToArray());
             return binaryTree;
         }
 
         List<T> outputList = new List<T>();
-        private void WriteDataToList(Node<T> node,bool isFirstIteration = true)
+        public void WriteDataToList(Node<T> node,bool isFirstIteration = true)
         {
             if (node == null) return;
             if (isFirstIteration) outputList.Add(node.Data);
@@ -67,15 +72,19 @@ namespace ConsoleApp17
             }
             return;
         }
-        public override string ToString()
+
+        public string Print(Node<T> node)
         {
+            if (node == null) return string.Empty;
             outputList.Clear();
-            WriteDataToList(this.root);
+            WriteDataToList(node, true);
             string output = string.Empty;
             foreach (T value in outputList)
                 output += value + " ";
-            return output.Remove(output.Length - 2);
+            return output.Remove(output.Length-1);
         }
+
+        public override string ToString() => Print(this.root);
     }
     public class Node<T>
     {
@@ -117,12 +126,12 @@ namespace ConsoleApp17
             if (value.CompareTo(this.data) < 0)
             {
                 if (this.left == null) this.left = new BinaryTree<T>(value, this);
-                else this.left.Add(value);
+                else if (this.left != null) this.left.Add(value);
             }
             else
             {
                 if (this.right == null) this.right = new BinaryTree<T>(value, this);
-                else this.right.Add(value);
+                else if (this.right != null) this.right.Add(value);
             }
         }
 
@@ -138,7 +147,7 @@ namespace ConsoleApp17
             BinaryTree<T> tree = search(value);//а был ли мальчик?
             if (tree == null) return false;
             BinaryTree<T> currentTree;
-            if (tree == this) //мальчик становится девочкой бесполым
+            if (tree == this) //мальчик становится бесполым
             {
                 if (tree.right != null) currentTree = tree.right;
                 else currentTree = tree.left;
