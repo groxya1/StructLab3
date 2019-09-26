@@ -49,10 +49,6 @@ namespace ConsoleApp17
         {
             outputList.Clear();
             WriteDataToList(this.root);
-            /*foreach (var item in outputList)
-            {
-                Console.WriteLine(item);
-            }*/
             BinaryTree<T> binaryTree = new BinaryTree<T>(this.root.Data,null);
             outputList.RemoveAt(0);
             binaryTree.Add(outputList.ToArray());
