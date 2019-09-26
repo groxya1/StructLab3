@@ -7,7 +7,7 @@ namespace ConsoleApp17
     {
         static void Main(string[] args)
         {
-            BinaryTree<int> binTree = new BinaryTree<int>(7, null);
+            BinaryTree<int> binTree = new BinaryTree<int>(7);
             binTree.Add(9, 5, 2, 3, 6, 1, 8, 4);
             Console.WriteLine(binTree.ToPrint());
             Console.WriteLine("идём направо:" + binTree.Right.ToPrint());
@@ -106,7 +106,7 @@ namespace ConsoleApp17
         public BinaryTree<T> Right
         { get { return right; } }
 
-        public BinaryTree(T value, BinaryTree<T> parent)
+        public BinaryTree(T value, BinaryTree<T> parent=null)
         {
             this.data = value;
             this.parent = parent;
