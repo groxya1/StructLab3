@@ -7,15 +7,12 @@ namespace ConsoleApp17
     {
         static void Main(string[] args)
         {
-            BinaryTree<int> binTree = new BinaryTree<int>(12);
-            binTree.Add(7, 32, 21, 14, 17, 76, 18, 9);
-            Console.WriteLine(binTree);
-
-            Tree<int> tree = new Tree<int>(98);
-            tree.Add(7, 32, 14);
-            tree.Add(tree.Root.GetChild(0),76,18);
-            Console.WriteLine(tree.ToString());
-            Console.WriteLine(tree.ConvertToBinaryTree().ToString());
+            BinaryTree<int> binTree = new BinaryTree<int>(1);
+            binTree.Add(2, 3, 4, 5, 6, 7, 8, 9);
+            Tree<int> tree = new Tree<int>(1);
+            tree.Add(2, 3, 4);
+            tree.Add(tree.Root.GetChild(0),5,6);
+            Console.WriteLine(tree.ConvertToBinaryTree().ToPrint());
             Console.ReadKey();
         }
     }
@@ -51,7 +48,9 @@ namespace ConsoleApp17
             {
                 Console.WriteLine(item);
             }*/
-            BinaryTree<T> binaryTree = new BinaryTree<T>(null,outputList.ToArray());
+            BinaryTree<T> binaryTree = new BinaryTree<T>(root.Data);
+            outputList.RemoveAt(0);
+            binaryTree.Add(outputList.ToArray());
             return binaryTree;
         }
 
@@ -106,15 +105,6 @@ namespace ConsoleApp17
         public BinaryTree<T> Right
         { get { return right; } }
 
-        public BinaryTree(BinaryTree <T> parent = null, params T[] values)
-        {
-            if (values == null||values.Length<1) return;
-            this.data = values[0];
-            this.parent = parent;
-            if (values.Length>1)
-                for (int i = 1; i < values.Length-1; i++)
-                    this.Add(values[i]);
-        }
         public BinaryTree(T value, BinaryTree<T> parent = null)
         {
             this.data = value;
@@ -226,24 +216,27 @@ namespace ConsoleApp17
             }
         }
 
+
         List<T> outputList = new List<T>();
-        private void WriteDataToList(BinaryTree<T> node, bool isFirstIteration = true)
+        string outputString = "";
+        private void _print(BinaryTree<T> node)
         {
             if (node == null) return;
-            WriteDataToList(node.left,false);
+            _print(node.left);
             outputList.Add(node.data);
-            if (node.right != null) WriteDataToList(node.right, false);
+            outputString += node + " ";
+            if (node.right != null)
+                _print(node.right);
             return;
         }
 
-        public override string ToString()
+        public string ToPrint()
         {
             outputList.Clear();
-            WriteDataToList(this);
-            string output = string.Empty;
-            foreach (T value in outputList)
-                output += value + ", ";
-            return output.Remove(output.Length-2);
+            _print(this);
+            return outputString;
         }
+
+        public override string ToString() => data.ToString();
     }
 }
