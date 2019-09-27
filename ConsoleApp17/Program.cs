@@ -50,7 +50,7 @@ namespace ConsoleApp17
         }
 
 
-        public BinaryTree<T> ConvertToBinaryTree(Node<T> rootNode = null)
+        public BinaryTree<T> ConvertIntoBinaryTree(Node<T> rootNode = null)
         {
             if (rootNode == null) rootNode = this.root;
             outputList.Clear();
