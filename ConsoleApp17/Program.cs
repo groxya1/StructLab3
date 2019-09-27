@@ -18,9 +18,9 @@ namespace ConsoleApp17
             tree.Add(tree.Root.GetChild(0).GetChild(1), 6, 4, 9);
             Console.WriteLine("\nэто дерево с корнем 5:" + tree.ToString());
             Console.WriteLine("это 1-ое поддерево дерева с корнем 5: " + tree.Print(tree.Root.GetChild(0)));
-            Console.WriteLine("это бинарное дерево, полученное из 1-го поддерева дерева с корнем 5: " + tree.ConvertToBinaryTree(tree.Root.GetChild(0)).ToPrint());
-            Console.WriteLine("это правое поддерево бинарного дерева, полученного из 1-го поддерева дерева с корнем 5: " + tree.ConvertToBinaryTree(tree.Root.GetChild(0)).Right.ToPrint());
-            Console.WriteLine("это левое поддерево правого поддерева бинарного дерева, полученного из 1-го поддерева дерева с корнем 5: " + tree.ConvertToBinaryTree(tree.Root.GetChild(0)).Right.Left.ToPrint());
+            Console.WriteLine("это бинарное дерево, полученное из 1-го поддерева дерева с корнем 5: " + tree.ConvertIntoBinaryTree(tree.Root.GetChild(0)).ToPrint());
+            Console.WriteLine("это правое поддерево бинарного дерева, полученного из 1-го поддерева дерева с корнем 5: " + tree.ConvertIntoBinaryTree(tree.Root.GetChild(0)).Right.ToPrint());
+            Console.WriteLine("это левое поддерево правого поддерева бинарного дерева, полученного из 1-го поддерева дерева с корнем 5: " + tree.ConvertIntoBinaryTree(tree.Root.GetChild(0)).Right.Left.ToPrint());
             Console.ReadKey();
         }
     }
