@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 namespace ConsoleApp17
 {
     class Program
@@ -9,15 +8,15 @@ namespace ConsoleApp17
         {
             BinaryTree<int> binTree = new BinaryTree<int>(7);
             binTree.Add(9, 5, 2, 3, 6, 1, 8, 4);
-            Console.WriteLine(binTree.ToPrint());
+            Console.WriteLine("бинарное дерево с корнем 7 : " + binTree.ToPrint());
             Console.WriteLine("идём направо: " + binTree.Right.ToPrint());
             Console.WriteLine("идём налево: " + binTree.Left.ToPrint());
-            Console.WriteLine("идём как я вчера: " + binTree.Left.Right.ToPrint());
+
             Tree<int> tree = new Tree<int>(5);
             tree.Add(3, 2, 1);
             tree.Add(tree.Root.GetChild(0),8,7);
             tree.Add(tree.Root.GetChild(0).GetChild(1), 6, 4, 9);
-            Console.WriteLine("это дерево с корнем 5:" + tree.ToString());
+            Console.WriteLine("\nэто дерево с корнем 5:" + tree.ToString());
             Console.WriteLine("это 1-ое поддерево дерева с корнем 5: " + tree.Print(tree.Root.GetChild(0)));
             Console.WriteLine("это бинарное дерево, полученное из 1-го поддерева дерева с корнем 5: " + tree.ConvertToBinaryTree(tree.Root.GetChild(0)).ToPrint());
             Console.WriteLine("это правое поддерево бинарного дерева, полученного из 1-го поддерева дерева с корнем 5: " + tree.ConvertToBinaryTree(tree.Root.GetChild(0)).Right.ToPrint());
@@ -28,6 +27,8 @@ namespace ConsoleApp17
 
     public class Tree<T> where T: IComparable<T>
     {
+        //класс дерева писался многим позже бинарного
+        //в бинарном не нужен был вспомогательный класс, поэтому они сильно отличаются
         private Node<T> root;
 
         public Tree(T value)
@@ -59,7 +60,7 @@ namespace ConsoleApp17
             binaryTree.Add(outputList.ToArray());
             return binaryTree;
         }
-
+        //не так уж и сильно отличаются на самом деле
         List<T> outputList = new List<T>();
         public void WriteDataToList(Node<T> node,bool isFirstIteration = true)
         {
@@ -123,31 +124,31 @@ namespace ConsoleApp17
 
         public void Add(T value)
         {
-            if (value.CompareTo(this.data) < 0)
+            if (value.CompareTo(this.data) < 0)//причина почему страшно
             {
                 if (this.left == null) this.left = new BinaryTree<T>(value, this);
-                else if (this.left != null) this.left.Add(value);
+                else this.left.Add(value);
             }
             else
             {
                 if (this.right == null) this.right = new BinaryTree<T>(value, this);
-                else if (this.right != null) this.right.Add(value);
+                else this.right.Add(value);
             }
         }
 
-        public void Add(params T[] values)//было лень поэтому подумал
+        public void Add(params T[] values)//было лень поэтому не думал
         {
             foreach (T value in values)
                 Add(value);
             return;
         }
 
-        public bool Remove(T value)//насилие над детьми
+        public bool Remove(T value)
         {
             BinaryTree<T> tree = search(value);//а был ли мальчик?
             if (tree == null) return false;
             BinaryTree<T> currentTree;
-            if (tree == this) //мальчик становится бесполым
+            if (tree == this)//удаление корня
             {
                 if (tree.right != null) currentTree = tree.right;
                 else currentTree = tree.left;
@@ -159,16 +160,16 @@ namespace ConsoleApp17
                 return true;
             }
 
-            if (tree.left == null && tree.right == null && tree.parent != null)//мальчик лишается пальцев
+            if (tree.left == null && tree.right == null && tree.parent != null)//листик
             {
                 if (tree == tree.parent.left) tree.parent.left = null;
                 else tree.parent.right = null;
                 return true;
             }
 
-            if (tree.left != null && tree.right == null)//мальчик левша без правой руки
+            if (tree.left != null && tree.right == null)//нет правой ветви, есть левая
             {
-                tree.left.parent = tree.parent;//своим родителям он не нужен, поэтому на коляске в детдом
+                tree.left.parent = tree.parent;
                 if (tree == tree.parent.left) tree.parent.left = tree.left;
                 else if (tree == tree.parent.right) tree.parent.right = tree.left;
                 return true;
@@ -217,10 +218,10 @@ namespace ConsoleApp17
         {
             return _search(this, value);
         }
-        private BinaryTree<T> _search(BinaryTree<T> tree, T value)//проверяем мальчика
+        private BinaryTree<T> _search(BinaryTree<T> tree, T value)
         {
             if (tree == null) return null;
-            switch (value.CompareTo(tree.data))//причина почему так страшно в начале
+            switch (value.CompareTo(tree.data))//причина почему так страшно
             {
                 case 1: return _search(tree.right, value);
                 case -1: return _search(tree.left, value);
@@ -232,21 +233,21 @@ namespace ConsoleApp17
 
         List<T> outputList = new List<T>();
         string outputString = "";
-        private void _print(BinaryTree<T> node)
+        private void GrabThemAll(BinaryTree<T> node)//метод был рекурсивным поэтому он отдельно
         {
             if (node == null) return;
-            _print(node.left);
+            GrabThemAll(node.left);
             outputList.Add(node.data);
             outputString += node + " ";
             if (node.right != null)
-                _print(node.right);
+                GrabThemAll(node.right);
             return;
         }
 
-        public string ToPrint()
+        public string ToPrint()//т.к. нода нет как отдельного класса, ToString занят
         {
             outputList.Clear();
-            _print(this);
+            GrabThemAll(this);
             return outputString;
         }
 
