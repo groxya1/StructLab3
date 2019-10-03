@@ -5,11 +5,7 @@ import java.util.LinkedList;
 public class Set {//целый бесполезный класс
     private LinkedList<Integer> values = new LinkedList<>() {
     };
-    /*public T value(){
-        return value();
-    }*/
-
-    public LinkedList GetValues() {
+    public LinkedList<Integer> GetValues() {
         return values;
     }
     public int Count () {
@@ -39,7 +35,7 @@ public class Set {//целый бесполезный класс
 
 
     public void Remove(int value){
-        if (values.contains(value))values.remove(value);
+        if (values.contains(value)) values.remove(Integer.valueOf(value));
     }
 
 
@@ -87,7 +83,7 @@ public class Set {//целый бесполезный класс
     @Override
     public String toString()
     {
-        StringBuffer result = new StringBuffer("");
+        StringBuffer result = new StringBuffer();
         for (int value:values)
             result.append(value +", ");
         return result.replace(result.length()-2,result.length()-1,"").toString();
