@@ -1,5 +1,4 @@
 import java.util.LinkedList;
-import java.util.
 
 public class Node<T>//мы встроили дерево тебе в дерево чтобы ты мог перебирать дерево пока перебираешь дерево
 {
@@ -52,7 +51,7 @@ public class Node<T>//мы встроили дерево тебе в дерев�
 
     public int getWeight(int CurrentWeight,String names) {//Let me introduce you
         if (parent==null) {
-            System.out.println("у нас были: " + names);
+            System.out.println("у нас были: " + names +"\n и весили они " + CurrentWeight);
             return CurrentWeight;
         }
         names +=this.name + ", ";

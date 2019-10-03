@@ -58,29 +58,32 @@ public class Tree<T> {
         return this.root.toString();
     }
 
-    public String SearchAlgorithmStarter(int maxVolume,LinkedList<T> values)//страшно вырубай
+    public int SearchAlgorithmStarter(int maxVolume,LinkedList<T> values,LinkedList<String> names)//страшно вырубай
     {
         LinkedList<T> valuesBuffer = values;
+        LinkedList<String> namesBuffer = names;
         Random rnd = new Random();
         while (true) {
             int n = rnd.nextInt(valuesBuffer.size()-1);
             Tree<T> treeItSelf = new Tree<T>(valuesBuffer.get(n));
             valuesBuffer.remove(n);
-            return SearchAlgorithm(maxVolume, valuesBuffer, treeItSelf.root);
+            namesBuffer.remove(n);
+            return SearchAlgorithm(maxVolume, valuesBuffer, namesBuffer, treeItSelf.root);
         }
         //return SearchAlgorithmStarter(maxVolume,values);
     }
 
-    private int SearchAlgorithm(int maxVolume, LinkedList<T> values,Node<T> node)
+    private int SearchAlgorithm(int maxVolume, LinkedList<T> values, LinkedList<String> names, Node<T> node)
     {
         Random ngrnd = new Random();
         int n = ngrnd.nextInt(values.size()-1);
-        getRandomChild(node).addChild(new Node<T>(values.get(n),node));
-        if (values.size()==1) {
+        getRandomChild(node).addChild(new Node<T>(values.get(n),node,names.get(n)));
+        if (values.size()==1||node.getWeight(0,"")<maxVolume) {//тут ошибка помни
             return node.getWeight(0,"");
         }
         values.remove(n);
-        return SearchAlgorithm(maxVolume, values, node);
+        names.remove(n);
+        return SearchAlgorithm(maxVolume, values, names, node);
     }
 
     private Node<T> getRandomChild(Node<T> startNode)//сука я сделал Node ещё 1 деревом
