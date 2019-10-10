@@ -10,7 +10,6 @@ public class Main {
             Item = new Item(key);
             table.insert(Item);
         }
-
         table.displayTable();
         Item = table.find(2);
         if (Item != null)System.out.println("Во че есть " + 2);

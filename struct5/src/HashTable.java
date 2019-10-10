@@ -59,7 +59,7 @@ public class HashTable {
         {
             if (hashArray[hashVal].getKey() == key)
                 return hashArray[hashVal];
-            ++hashVal; // go to next cell
+            ++hashVal;//к следующей ячейке
             hashVal %= size;
         }
         return null;
